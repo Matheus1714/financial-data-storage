@@ -1,18 +1,21 @@
 version: '3.8'
 services:
-
-  db:
-    image: postgres:13-alpine
+  database:
+    image: postgres
     ports:
-      - "5432:5432"
+      - "2222:5432"
     environment:
-      POSTGRES_USER: SrUVENGThsaleNC
-      POSTGRES_PASSWORD: g9JYX9q*
-      POSTGRES_DB: finantial_data
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: finantialdb
     command: [ "postgres", "-c", "log_statement=all" ]
     restart: always
+    volumes:
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql
   adminer:
     image: adminer
     restart: always
+    depends_on:
+      - database
     ports:
       - 8080:8080
