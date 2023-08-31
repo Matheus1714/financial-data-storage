@@ -9,8 +9,8 @@ fake = Faker(['en_US', 'pt_BR'])
 
 def create_conn()->psycopg2.connect:
     return psycopg2.connect(
-        host = "localhost",
-        port = 2222,
+        host = "database",
+        port = 5432,
         database = "finantialdb",
         user = "postgres",
         password = "postgres"
