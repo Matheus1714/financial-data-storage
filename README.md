@@ -24,7 +24,7 @@ Dive into the `/sql/init.sql` file for a detailed `SQL` script with all entity d
 
 ## Running the Project 🚀
 
-Para executar este projeto siga estas etapas:
+To run this project follow these steps:
 
 1. Clone the repository from GitHub:
 
