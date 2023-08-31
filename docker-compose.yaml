@@ -19,3 +19,9 @@ services:
       - database
     ports:
       - 8080:8080
+  mock_app:
+    build:
+      context: .
+      dockerfile: Dockerfile.mock_app  # Specify the Dockerfile for your mock app
+    depends_on:
+      - database
