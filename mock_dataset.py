@@ -3,8 +3,7 @@ import psycopg2
 from psycopg2 import sql
 import uuid
 import random
-from datetime import datetime, timedelta
-import matplotlib.pyplot as plt
+from datetime import datetime
 
 fake = Faker(['en_US', 'pt_BR'])
 
