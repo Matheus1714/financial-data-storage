@@ -56,9 +56,9 @@ The database population process is orchestrated by the `mock_dataset.py` file.
 
 ### Remote Database
 
-1. Follow step 1.
+1. Follow step 1 from [Local Database](#local-database)
 
-2. Create an account at [https://console.neon.tech/](https://console.neon.tech/) and generate a database.
+2. Create an account at [https://console.neon.tech/](https://console.neon.tech/) and generate a database and tables with file `sql/init.sql`.
 
 3. Take connection url and add and replace in `.env` file:
 
