@@ -22,6 +22,6 @@ services:
   mock_app:
     build:
       context: .
-      dockerfile: Dockerfile.mock_app  # Specify the Dockerfile for your mock app
+      dockerfile: Dockerfile.mock_app
     depends_on:
       - database
