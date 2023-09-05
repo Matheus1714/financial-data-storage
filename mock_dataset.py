@@ -4,17 +4,15 @@ from psycopg2 import sql
 import uuid
 import random
 from datetime import datetime
+from dotenv import dotenv_values
 
 fake = Faker(['en_US', 'pt_BR'])
 
+config = dotenv_values(".env")
+
 def create_conn()->psycopg2.connect:
-    return psycopg2.connect(
-        host = "database",
-        port = 5432,
-        database = "finantialdb",
-        user = "postgres",
-        password = "postgres"
-    )
+    conn_str = config.get('PG_CONNECTION_STRING')
+    return psycopg2.connect(conn_str)
 
 def create_customers(n:int)->None:
     connection = create_conn()
