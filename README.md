@@ -26,6 +26,8 @@ Dive into the `/sql/init.sql` file for a detailed `SQL` script with all entity d
 
 To run this project follow these steps:
 
+### Local Database
+
 1. Clone the repository from GitHub:
 
 ```shell
@@ -36,7 +38,13 @@ git clone https://github.com/Matheus1714/financial-data-storage.git
 
 3. Open your terminal and navigate to the project's root directory.
 
-4. Run the following command:
+4. Change the `.env.example` file to `.env`
+
+```env
+PG_CONNECTION_STRING=postgres://postgres:postgres@database:5432/finantialdb
+```
+
+5. Run the following command:
 
 ```shell
 docker-compose up --build
@@ -45,6 +53,42 @@ docker-compose up --build
 This command orchestrates the magic defined in the `docker-compose.yaml` file. It'll spin up the database and populate it with the wealth of information encapsulated in the entity relationship model.
 
 The database population process is orchestrated by the `mock_dataset.py` file.
+
+### Remote Database
+
+1. Follow step 1.
+
+2. Create an account at [https://console.neon.tech/](https://console.neon.tech/) and generate a database.
+
+3. Take connection url and add and replace in `.env` file:
+
+```env
+PG_CONNECTION_STRING=... // Add your remote connection string here
+```
+
+4. Install [virtualenv](https://pypi.org/project/virtualenv/) in python
+
+```shell
+pip install virtualenv
+```
+
+5. Generate a virtual environment
+
+```
+virtualenv venv
+```
+
+6. With the virtual environment active in the terminal, install the requirements file dependencies
+
+```
+pip install -r requirements.txt
+```
+
+7. Run the `mock_dataset.py` file
+
+```shell
+python mock_dataset.py
+```
 
 ## Accessing the Database 📡
 
