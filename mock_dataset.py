@@ -1,10 +1,13 @@
-from faker import Faker
-import psycopg2
-from psycopg2 import sql
-import uuid
 import random
+import time
+import uuid
 from datetime import datetime
+
+import psycopg2
 from dotenv import dotenv_values
+from faker import Faker
+from psycopg2 import sql
+from tqdm import tqdm
 
 fake = Faker(['en_US', 'pt_BR'])
 
@@ -14,12 +17,12 @@ def create_conn()->psycopg2.connect:
     conn_str = config.get('PG_CONNECTION_STRING')
     return psycopg2.connect(conn_str)
 
-def create_customers(n:int)->None:
+def create_customers(number_of_customers:int)->None:
     connection = create_conn()
 
     with connection.cursor() as cursor:
 
-        for _ in range(n):
+        for _ in tqdm(range(number_of_customers)):
             customer_id = str(uuid.uuid4())
             first_name = fake.first_name()
             last_name = fake.last_name()
@@ -39,14 +42,15 @@ def create_customers(n:int)->None:
 
     connection.close()
 
-def create_accounts(n:int)->None:
+def create_accounts(number_of_accounts:int)->None:
+    time.sleep(1)
     connection = create_conn()
 
     with connection.cursor() as cursor:
         cursor.execute(sql.SQL("SELECT customer_id FROM customers"))
         customer_ids = [row[0] for row in cursor.fetchall()]
 
-        for _ in range(10):
+        for _ in tqdm(range(number_of_accounts)):
             account_id = str(uuid.uuid4())
             customer_id = str(random.choice(customer_ids))
             account_number = fake.random_int(min=10000000, max=99999999)
@@ -65,25 +69,25 @@ def create_accounts(n:int)->None:
     connection.close()
 
 def create_transactions()->None:
+    time.sleep(1)
+    transaction_types = ['Sport'] * 3 + ['Travel'] * 9 + ['House'] * 7 + ['Food'] * 1 + ['Game'] * 10 + ['Invest'] * 1
+    number_of_transactions_by_month = [random.randint(10, 100) for _ in range(12)]
+    
     connection = create_conn()
 
     with connection.cursor() as cursor:
         cursor.execute(sql.SQL("SELECT account_id FROM accounts"))
         account_ids = [row[0] for row in cursor.fetchall()]
-
-        transaction_types = transaction_types = ['Deposit', 'Withdrawal', 'Transfer', 'Payment', 'Refund', 'Purchase', 'Fee', 'Interest', 'Conversion', 'Adjustment',
-                    'Loan', 'Dividend', 'Investment', 'Charge', 'Withdrawal', 'Reversal', 'Credit', 'Debit', 'Exchange', 'Earned']
+        last_year = datetime.now().year - 1
         
-        for account_id in account_ids:
-            for month in range(1, 13):
+        for account_id in tqdm(account_ids):
+            for month in tqdm(range(1, 13)):
+                number_of_transactions = number_of_transactions_by_month[month-1]
                 days_in_month = 30 if month in [4, 6, 9, 11] else 31
                 if month == 2:
                     days_in_month = 28
                 
-                for _ in range(days_in_month):
-
-                    last_year = datetime.now().year - 1
-
+                for _ in tqdm(range(number_of_transactions)):
                     transaction_timestamp = datetime(last_year, month, random.randint(1, days_in_month))
 
                     transaction_id = str(uuid.uuid4())
@@ -96,13 +100,13 @@ def create_transactions()->None:
                         (transaction_id, account_id, transaction_type, amount, description, transaction_timestamp)
                     )
 
-        connection.commit()
+            connection.commit()
     
     connection.close()
 
 def main():
-    create_customers(10)
-    create_accounts(10)
+    create_customers(1)
+    create_accounts(1)
     create_transactions()
 if __name__ == '__main__':
     main()
